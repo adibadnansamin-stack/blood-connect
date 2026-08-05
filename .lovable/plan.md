@@ -71,7 +71,10 @@ Both tables get `GRANT SELECT, INSERT` to `anon` and `ALL` to `service_role`.
 - **Palette**: Crimson Care — clean white background (#ffffff), light surface (#f8f9fa), primary red (#dc2626), dark red (#991b1b).
 - **Layout**: Hero search on the homepage, card grids for directory and request board.
 - **Typography**: Clean sans-serif, medical/trustworthy feel.
+- **Visual style**: Minimalist — simple line icons, no heavy illustrations or stock photos, generous whitespace, flat cards, restrained use of color.
+- **Motion**: Minimalist — no entrance animations, no parallax, only subtle hover/focus transitions on interactive elements.
 - **Tokens**: Update `src/styles.css` with the chosen palette mapped to semantic tokens (`--primary`, `--accent`, etc.) in oklch format.
+
 
 ## Technical notes
 
