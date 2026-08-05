@@ -90,4 +90,9 @@ Both tables get `GRANT SELECT, INSERT` to `anon` and `ALL` to `service_role`.
 3. Build shared components: Header, Footer, DonorCard, RequestCard, FilterBar, DonorForm, RequestForm.
 4. Build routes: `__root.tsx` layout, `/`, `/donors`, `/requests`, `/donate`, `/request-blood`.
 5. Add server functions for listing, filtering, and inserting donors and requests.
-6. Add SEO metadata and test form submissions end-to-end.
+6. Add a footer credits section with the following attribution on separate lines:
+   - "Created by Adib Adnan"
+   - "CSTE-20"
+   - "Noakhali Science and Technology University"
+7. Add SEO metadata and test form submissions end-to-end.
+
