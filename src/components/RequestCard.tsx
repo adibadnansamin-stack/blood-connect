@@ -1,7 +1,8 @@
-import { Phone, Mail, MapPin, Droplet, Clock } from "lucide-react";
+import { MapPin, Droplet, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { Tables } from "@/integrations/supabase/types";
 import { URGENCY_OPTIONS } from "@/lib/blood-data";
+import { ContactDialog } from "@/components/ContactDialog";
 
 interface RequestCardProps {
   request: Tables<"blood_requests">;
@@ -16,7 +17,6 @@ const urgencyClasses: Record<string, string> = {
   within_week: "bg-warning/15 text-warning-foreground",
   planned: "bg-info/15 text-info",
 };
-
 
 export function RequestCard({ request }: RequestCardProps) {
   return (
@@ -45,32 +45,29 @@ export function RequestCard({ request }: RequestCardProps) {
           {urgencyLabel(request.urgency)}
         </span>
         <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-muted-foreground">
-          {request.created_at ? formatDistanceToNow(new Date(request.created_at), { addSuffix: true }) : "Recently"}
+          {request.created_at
+            ? `Posted ${formatDistanceToNow(new Date(request.created_at), { addSuffix: true })}`
+            : "Recently posted"}
         </span>
       </div>
 
-      <div className="mt-4 space-y-1.5 text-sm">
-        {request.phone && (
-          <a
-            href={`tel:${request.phone}`}
-            className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-          >
-            <Phone className="h-4 w-4" />
-            {request.phone}
-          </a>
-        )}
-        {request.email && (
-          <a
-            href={`mailto:${request.email}`}
-            className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-          >
-            <Mail className="h-4 w-4" />
-            {request.email}
-          </a>
-        )}
-      </div>
-
       {request.note && <p className="mt-4 text-sm text-muted-foreground">{request.note}</p>}
+
+      <div className="mt-5 pt-1">
+        <ContactDialog
+          kind="request"
+          name={request.patient_name}
+          bloodGroup={request.blood_group}
+          location={request.location}
+          phone={request.phone}
+          email={request.email}
+          trigger={
+            <button type="button" className="btn btn-outline w-full px-4 py-2.5 text-sm">
+              View request
+            </button>
+          }
+        />
+      </div>
     </div>
   );
 }
