@@ -50,7 +50,7 @@ export function RequestForm() {
         <button
           type="button"
           onClick={() => setSubmitted(false)}
-          className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          className="mt-6 btn btn-primary px-4 py-2 text-sm"
         >
           Post another request
         </button>
@@ -176,7 +176,7 @@ export function RequestForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-70 sm:w-auto"
+        className="btn btn-primary w-full px-5 py-2.5 text-sm sm:w-auto"
       >
         {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
         Post blood request

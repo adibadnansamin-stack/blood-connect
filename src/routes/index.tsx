@@ -77,14 +77,14 @@ function HomePage() {
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               to="/donors"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              className="btn btn-primary px-6 py-3 text-base"
             >
               <Search className="h-5 w-5" />
               Find donors
             </Link>
             <Link
               to="/request-blood"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-6 py-3 text-base font-medium text-foreground transition-colors hover:bg-accent"
+              className="btn btn-outline px-6 py-3 text-base"
             >
               Request blood
             </Link>
