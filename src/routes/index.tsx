@@ -157,9 +157,9 @@ function HomePage() {
             </div>
             <Link
               to="/donors"
-              className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline sm:inline-flex"
+              className="group hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent sm:inline-flex"
             >
-              View all <ArrowRight className="h-4 w-4" />
+              View all <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -173,8 +173,8 @@ function HomePage() {
             )}
           </div>
           <div className="mt-6 text-center sm:hidden">
-            <Link to="/donors" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
-              View all donors <ArrowRight className="h-4 w-4" />
+            <Link to="/donors" className="group inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent">
+              View all donors <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
@@ -190,9 +190,9 @@ function HomePage() {
             </div>
             <Link
               to="/requests"
-              className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline sm:inline-flex"
+              className="group hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent sm:inline-flex"
             >
-              View all <ArrowRight className="h-4 w-4" />
+              View all <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -206,8 +206,8 @@ function HomePage() {
             )}
           </div>
           <div className="mt-6 text-center sm:hidden">
-            <Link to="/requests" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
-              View all requests <ArrowRight className="h-4 w-4" />
+            <Link to="/requests" className="group inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent">
+              View all requests <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
@@ -223,13 +223,13 @@ function HomePage() {
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               to="/donate"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-primary-foreground px-6 py-3 text-base font-medium text-primary transition-colors hover:bg-primary-foreground/90"
+              className="btn bg-primary-foreground px-6 py-3 text-base text-primary shadow-sm hover:bg-primary-foreground/90"
             >
               Become a donor
             </Link>
             <Link
               to="/request-blood"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-primary-foreground/30 bg-transparent px-6 py-3 text-base font-medium text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+              className="btn border border-primary-foreground/40 bg-transparent px-6 py-3 text-base text-primary-foreground hover:bg-primary-foreground/10"
             >
               Post a request
             </Link>
