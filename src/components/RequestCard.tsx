@@ -20,7 +20,7 @@ const urgencyClasses: Record<string, string> = {
 
 export function RequestCard({ request }: RequestCardProps) {
   return (
-    <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
+    <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm card-hover">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold text-card-foreground">{request.patient_name}</h3>

@@ -7,7 +7,7 @@ interface DonorCardProps {
 
 export function DonorCard({ donor }: DonorCardProps) {
   return (
-    <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
+    <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm card-hover">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold text-card-foreground">{donor.name}</h3>

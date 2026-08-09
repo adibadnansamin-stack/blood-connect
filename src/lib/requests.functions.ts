@@ -14,7 +14,7 @@ const requestInsertSchema = z.object({
   patient_name: z.string().min(2).max(100),
   blood_group: z.enum([...BLOOD_GROUPS] as [string, ...string[]]),
   location: z.string().min(2).max(200),
-  phone: z.string().max(50).optional().or(z.literal("")),
+  phone: z.string().trim().min(6).max(50),
   email: z.string().email().max(255).optional().or(z.literal("")),
   urgency: z.enum([...URGENCY_OPTIONS.map((u) => u.value)] as [string, ...string[]]),
 

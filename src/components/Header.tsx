@@ -17,8 +17,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2 text-primary">
-          <Droplet className="h-6 w-6 fill-primary" />
+        <Link to="/" className="group flex items-center gap-2 text-primary">
+          <Droplet className="h-6 w-6 fill-primary transition-transform duration-200 group-hover:scale-110" />
           <span className="text-lg font-semibold tracking-tight text-foreground">BloodConnect</span>
         </Link>
 
@@ -29,7 +29,7 @@ export function Header() {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                className={`nav-link rounded-md px-3 py-2 text-sm font-medium ${
                   isActive
                     ? "bg-secondary text-foreground"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -44,7 +44,7 @@ export function Header() {
         <button
           type="button"
           onClick={() => setMobileOpen((v) => !v)}
-          className="inline-flex items-center justify-center rounded-md p-2 text-foreground md:hidden"
+          className="btn p-2 text-foreground hover:bg-secondary md:hidden"
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

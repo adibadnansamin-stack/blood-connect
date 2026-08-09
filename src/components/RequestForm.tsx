@@ -10,8 +10,8 @@ const schema = z.object({
   patient_name: z.string().min(2, "Patient name is required").max(100, "Name is too long"),
   blood_group: z.string().refine((v) => BLOOD_GROUPS.includes(v as never), "Select a blood group"),
   location: z.string().min(2, "Location is required").max(200, "Location is too long"),
-  phone: z.string().max(50, "Phone number is too long").optional(),
-  email: z.string().email("Invalid email").max(255, "Email is too long").optional().or(z.literal("")),
+  phone: z.string().trim().min(6, "A phone number is required for emergency contact").max(50, "Phone number is too long"),
+  email: z.string().trim().max(255, "Email is too long").email("Invalid email").optional().or(z.literal("")),
   urgency: z.string().refine((v) => URGENCY_OPTIONS.some((u) => u.value === v), "Select urgency"),
   note: z.string().max(500, "Note is too long").optional(),
   website: z.string().max(10).optional(), // honeypot
@@ -50,7 +50,7 @@ export function RequestForm() {
         <button
           type="button"
           onClick={() => setSubmitted(false)}
-          className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          className="mt-6 btn btn-primary px-4 py-2 text-sm"
         >
           Post another request
         </button>
@@ -132,7 +132,7 @@ export function RequestForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-1.5">
           <label htmlFor="phone" className="text-sm font-medium text-card-foreground">
-            Contact phone
+            Contact phone <span className="font-normal text-muted-foreground">(required)</span>
           </label>
           <input
             id="phone"
@@ -146,7 +146,7 @@ export function RequestForm() {
 
         <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-medium text-card-foreground">
-            Contact email
+            Contact email <span className="font-normal text-muted-foreground">(optional)</span>
           </label>
           <input
             id="email"
@@ -155,7 +155,11 @@ export function RequestForm() {
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             placeholder="you@example.com"
           />
-          {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+          {errors.email ? (
+            <p className="text-sm text-destructive">{errors.email.message}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">Phone is the fastest way to connect in an emergency — email is optional.</p>
+          )}
         </div>
       </div>
 
@@ -176,7 +180,7 @@ export function RequestForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-70 sm:w-auto"
+        className="btn btn-primary w-full px-5 py-2.5 text-sm sm:w-auto"
       >
         {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
         Post blood request

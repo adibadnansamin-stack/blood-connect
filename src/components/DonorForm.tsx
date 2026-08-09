@@ -10,8 +10,8 @@ const schema = z.object({
   name: z.string().min(2, "Name is required").max(100, "Name is too long"),
   blood_group: z.string().refine((v) => BLOOD_GROUPS.includes(v as never), "Select a blood group"),
   location: z.string().min(2, "Location is required").max(200, "Location is too long"),
-  phone: z.string().max(50, "Phone number is too long").optional(),
-  email: z.string().email("Invalid email").max(255, "Email is too long").optional().or(z.literal("")),
+  phone: z.string().trim().min(6, "A phone number is required for emergency contact").max(50, "Phone number is too long"),
+  email: z.string().trim().max(255, "Email is too long").email("Invalid email").optional().or(z.literal("")),
   is_available: z.boolean(),
   note: z.string().max(500, "Note is too long").optional(),
   website: z.string().max(10).optional(), // honeypot
@@ -50,7 +50,7 @@ export function DonorForm() {
         <button
           type="button"
           onClick={() => setSubmitted(false)}
-          className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          className="mt-6 btn btn-primary px-4 py-2 text-sm"
         >
           Register another donor
         </button>
@@ -114,7 +114,7 @@ export function DonorForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-1.5">
           <label htmlFor="phone" className="text-sm font-medium text-card-foreground">
-            Phone
+            Phone <span className="font-normal text-muted-foreground">(required)</span>
           </label>
           <input
             id="phone"
@@ -128,7 +128,7 @@ export function DonorForm() {
 
         <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-medium text-card-foreground">
-            Email
+            Email <span className="font-normal text-muted-foreground">(optional)</span>
           </label>
           <input
             id="email"
@@ -137,7 +137,11 @@ export function DonorForm() {
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             placeholder="you@example.com"
           />
-          {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+          {errors.email ? (
+            <p className="text-sm text-destructive">{errors.email.message}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">Phone is the fastest way to connect in an emergency — email is optional.</p>
+          )}
         </div>
       </div>
 
@@ -167,7 +171,7 @@ export function DonorForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-70 sm:w-auto"
+        className="btn btn-primary w-full px-5 py-2.5 text-sm sm:w-auto"
       >
         {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
         Register as donor
