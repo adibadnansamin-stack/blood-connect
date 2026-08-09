@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
-import { ArrowRight, Droplet, Search, HeartHandshake, Users } from "lucide-react";
+import { ArrowRight, Droplet, Search, HeartHandshake, Users, Siren, ShieldCheck } from "lucide-react";
 import { listDonors } from "@/lib/donors.functions";
 import { listRequests } from "@/lib/requests.functions";
 import { DonorCard } from "@/components/DonorCard";
 import { RequestCard } from "@/components/RequestCard";
+import { CountUp } from "@/components/CountUp";
 import { BLOOD_GROUPS } from "@/lib/blood-data";
 
 const homeStatsQueryOptions = queryOptions({
@@ -15,7 +16,11 @@ const homeStatsQueryOptions = queryOptions({
       listDonors({ data: {} }),
       listRequests({ data: {} }),
     ]);
-    return { donorCount: donors.length, requestCount: requests.length };
+    return {
+      donorCount: donors.length,
+      requestCount: requests.length,
+      availableCount: donors.filter((d) => d.is_available).length,
+    };
   },
 });
 
@@ -50,65 +55,142 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
+const URGENT_LEVELS = ["urgent", "within_24h"];
+
 function HomePage() {
   const { data: stats } = useSuspenseQuery(homeStatsQueryOptions);
   const { data: donors } = useSuspenseQuery(recentDonorsQueryOptions);
   const { data: requests } = useSuspenseQuery(recentRequestsQueryOptions);
 
   const recentDonors = donors.slice(0, 3);
+  const urgentRequests = requests.filter((r) => URGENT_LEVELS.includes(r.urgency)).slice(0, 3);
   const recentRequestsList = requests.slice(0, 3);
 
   return (
     <div className="flex flex-col">
       {/* Hero */}
       <section className="bg-secondary/50 px-4 py-16 md:py-24">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-            <Droplet className="h-4 w-4 fill-primary" />
-            Save a life today
-          </div>
-          <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
-            Find a blood donor. <span className="text-primary">Or become one.</span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            A simple, public platform connecting blood donors with patients in need. No sign-up required.
-          </p>
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+              <Droplet className="h-4 w-4 fill-primary" />
+              Save a life today
+            </div>
+            <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+              Find a blood donor. <span className="text-primary">Or become one.</span>
+            </h1>
+            <p className="mt-4 max-w-xl text-lg text-muted-foreground lg:mx-0 mx-auto">
+              A simple, public platform connecting blood donors with patients in need. No sign-up
+              required.
+            </p>
 
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row lg:justify-start justify-center">
+              <Link to="/donors" className="btn btn-primary px-6 py-3 text-base">
+                <Search className="h-5 w-5" />
+                Find donors
+              </Link>
+              <Link to="/request-blood" className="btn btn-outline px-6 py-3 text-base">
+                Request blood
+              </Link>
+            </div>
+          </div>
+
+          {/* Subtle illustration */}
+          <div className="relative mx-auto hidden aspect-square w-full max-w-sm lg:block" aria-hidden="true">
+            <div className="absolute inset-0 rounded-full border border-primary/15" />
+            <div className="absolute inset-8 rounded-full border border-primary/20" />
+            <div className="absolute inset-16 rounded-full bg-primary/5" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Droplet className="h-24 w-24 fill-primary/90 text-primary/90" strokeWidth={1} />
+            </div>
+            {BLOOD_GROUPS.map((group, i) => {
+              const angle = (i / BLOOD_GROUPS.length) * 2 * Math.PI - Math.PI / 2;
+              const radius = 46;
+              return (
+                <span
+                  key={group}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-border bg-card px-2.5 py-1 text-xs font-semibold text-muted-foreground shadow-sm"
+                  style={{
+                    left: `${50 + radius * Math.cos(angle)}%`,
+                    top: `${50 + radius * Math.sin(angle)}%`,
+                  }}
+                >
+                  {group}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Urgent blood requests */}
+      <section className="border-b border-border px-4 py-14">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="inline-flex items-center gap-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+                <Siren className="h-6 w-6 text-destructive" />
+                Urgent blood requests
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                People who need blood right now or within 24 hours.
+              </p>
+            </div>
             <Link
-              to="/donors"
-              className="btn btn-primary px-6 py-3 text-base"
+              to="/requests"
+              className="group inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent"
             >
-              <Search className="h-5 w-5" />
-              Find donors
+              View all blood requests
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
-            <Link
-              to="/request-blood"
-              className="btn btn-outline px-6 py-3 text-base"
-            >
-              Request blood
-            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {urgentRequests.map((request) => (
+              <RequestCard key={request.id} request={request} />
+            ))}
+            {urgentRequests.length === 0 && (
+              <div className="col-span-full rounded-xl border border-border bg-card p-8 text-center">
+                <p className="font-medium text-card-foreground">No urgent requests right now.</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  If you need blood urgently, post a request and donors will see it here.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
       {/* Stats */}
       <section className="border-b border-border px-4 py-10">
-        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-6 text-center md:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 text-center md:grid-cols-4">
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <Users className="mx-auto h-6 w-6 text-primary" />
-            <p className="mt-2 text-3xl font-bold text-card-foreground">{stats.donorCount}</p>
+            <p className="mt-2 text-3xl font-bold text-card-foreground">
+              <CountUp value={stats.donorCount} />
+            </p>
             <p className="text-sm text-muted-foreground">Registered donors</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <HeartHandshake className="mx-auto h-6 w-6 text-primary" />
-            <p className="mt-2 text-3xl font-bold text-card-foreground">{stats.requestCount}</p>
-            <p className="text-sm text-muted-foreground">Open requests</p>
+            <p className="mt-2 text-3xl font-bold text-card-foreground">
+              <CountUp value={stats.requestCount} />
+            </p>
+            <p className="text-sm text-muted-foreground">Active requests</p>
           </div>
-          <div className="col-span-2 rounded-xl border border-border bg-card p-6 shadow-sm md:col-span-1">
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <ShieldCheck className="mx-auto h-6 w-6 text-primary" />
+            <p className="mt-2 text-3xl font-bold text-card-foreground">
+              <CountUp value={stats.availableCount} />
+            </p>
+            <p className="text-sm text-muted-foreground">Donors available now</p>
+          </div>
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <Droplet className="mx-auto h-6 w-6 fill-primary text-primary" />
-            <p className="mt-2 text-3xl font-bold text-card-foreground">{BLOOD_GROUPS.length}</p>
-            <p className="text-sm text-muted-foreground">Blood groups supported</p>
+            <p className="mt-2 text-3xl font-bold text-card-foreground">
+              <CountUp value={BLOOD_GROUPS.length} />
+            </p>
+            <p className="text-sm text-muted-foreground">Blood groups</p>
           </div>
         </div>
       </section>
@@ -128,8 +210,9 @@ function HomePage() {
               },
               {
                 step: "02",
-                title: "Connect directly",
-                description: "Contact details are shared openly so you can reach out immediately.",
+                title: "Connect safely",
+                description:
+                  "Contact details are shared only as needed to help coordinate the donation.",
               },
               {
                 step: "03",
@@ -210,6 +293,19 @@ function HomePage() {
               View all requests <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Disclaimer */}
+      <section className="border-t border-border bg-secondary/40 px-4 py-10">
+        <div className="mx-auto flex max-w-4xl gap-3 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground shadow-sm">
+          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+          <p>
+            <span className="font-semibold text-card-foreground">Important:</span> BloodConnect
+            helps connect blood donors and people requesting blood. Blood availability, donor
+            eligibility, and medical suitability should be confirmed independently with the relevant
+            hospital or medical professional.
+          </p>
         </div>
       </section>
 

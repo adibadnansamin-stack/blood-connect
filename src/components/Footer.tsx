@@ -24,8 +24,16 @@ export function Footer() {
           </div>
         </div>
 
+        <p className="mt-8 rounded-lg border border-border bg-card p-4 text-xs leading-relaxed text-muted-foreground">
+          <span className="font-semibold text-card-foreground">Important:</span> BloodConnect helps
+          connect blood donors and people requesting blood. Blood availability, donor eligibility,
+          and medical suitability should be confirmed independently with the relevant hospital or
+          medical professional.
+        </p>
+
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t border-border pt-6 text-sm text-muted-foreground md:flex-row">
           <p>&copy; {new Date().getFullYear()} BloodConnect. All rights reserved.</p>
+
           <p className="inline-flex items-center gap-1">
             Made with <Heart className="h-4 w-4 fill-primary text-primary" /> for humanity
           </p>
