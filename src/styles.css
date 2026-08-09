@@ -163,3 +163,125 @@
     color: var(--color-foreground);
   }
 }
+
+/* ---------------------------------------------------------------
+ * Interactive button system — subtle, professional motion.
+ * Hover: gentle lift + soft shadow. Active: press-down.
+ * --------------------------------------------------------------- */
+
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  will-change: transform;
+  transition:
+    transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+
+  & svg {
+    transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  &:hover:not(:disabled) svg {
+    transform: scale(1.08);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+@utility btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: 0 1px 2px oklch(0 0 0 / 0.08);
+
+  &:hover:not(:disabled) {
+    background-color: color-mix(in oklch, var(--primary), black 8%);
+    box-shadow: 0 10px 22px -8px color-mix(in oklch, var(--primary), transparent 45%);
+  }
+}
+
+@utility btn-outline {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--input);
+
+  &:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+    background-color: color-mix(in oklch, var(--primary), transparent 94%);
+    box-shadow: 0 8px 18px -10px oklch(0 0 0 / 0.35);
+  }
+}
+
+@utility nav-link {
+  position: relative;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.35rem;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+@utility card-hover {
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklch, var(--primary), transparent 70%);
+    box-shadow: 0 14px 30px -18px oklch(0 0 0 / 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn svg,
+  .card-hover,
+  .nav-link::after {
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+}
