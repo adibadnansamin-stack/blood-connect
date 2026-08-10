@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
-import { ArrowRight, Droplet, Search, HeartHandshake, Users, Siren, ShieldCheck } from "lucide-react";
+import { ArrowRight, Droplet, Search, HeartHandshake, Users, Siren, ShieldCheck, MapPin } from "lucide-react";
 import { listDonors } from "@/lib/donors.functions";
 import { listRequests } from "@/lib/requests.functions";
 import { DonorCard } from "@/components/DonorCard";
@@ -37,10 +37,10 @@ const recentRequestsQueryOptions = queryOptions({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "BloodConnect — Find Blood Donors & Request Blood" },
-      { name: "description", content: "Connect with blood donors or post a blood request. A simple, public platform helping patients and donors find each other quickly." },
-      { property: "og:title", content: "BloodConnect — Find Blood Donors & Request Blood" },
-      { property: "og:description", content: "Connect with blood donors or post a blood request. A simple, public platform helping patients and donors find each other quickly." },
+      { title: "BloodConnect — Blood Donors in Maijdee & Noakhali" },
+      { name: "description", content: "Find blood donors or post a blood request in Maijdee, Noakhali. A local platform helping patients and donors reach each other fast." },
+      { property: "og:title", content: "BloodConnect — Blood Donors in Maijdee & Noakhali" },
+      { property: "og:description", content: "Find blood donors or post a blood request in Maijdee, Noakhali. A local platform helping patients and donors reach each other fast." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -73,14 +73,14 @@ function HomePage() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-              <Droplet className="h-4 w-4 fill-primary" />
-              Save a life today
+              <MapPin className="h-4 w-4" />
+              Serving Maijdee &amp; surrounding areas
             </div>
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Find a blood donor. <span className="text-primary">Or become one.</span>
+              Find a blood donor in <span className="text-primary">Maijdee &amp; Noakhali.</span>
             </h1>
             <p className="mt-4 max-w-xl text-lg text-muted-foreground lg:mx-0 mx-auto">
-              A simple, public platform connecting blood donors with patients in need. No sign-up
+              A local platform connecting blood donors with people who need blood. No sign-up
               required.
             </p>
 
