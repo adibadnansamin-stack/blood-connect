@@ -53,6 +53,53 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_requests: {
+        Row: {
+          blood_group: string
+          created_at: string
+          donor_id: string
+          id: string
+          location: string | null
+          note: string | null
+          patient_name: string
+          patient_phone: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          blood_group: string
+          created_at?: string
+          donor_id: string
+          id?: string
+          location?: string | null
+          note?: string | null
+          patient_name: string
+          patient_phone: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          blood_group?: string
+          created_at?: string
+          donor_id?: string
+          id?: string
+          location?: string | null
+          note?: string | null
+          patient_name?: string
+          patient_phone?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_requests_donor_id_fkey"
+            columns: ["donor_id"]
+            isOneToOne: false
+            referencedRelation: "donors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       donors: {
         Row: {
           blood_group: string
@@ -64,6 +111,7 @@ export type Database = {
           name: string
           note: string | null
           phone: string | null
+          user_id: string | null
         }
         Insert: {
           blood_group: string
@@ -75,6 +123,7 @@ export type Database = {
           name: string
           note?: string | null
           phone?: string | null
+          user_id?: string | null
         }
         Update: {
           blood_group?: string
@@ -86,6 +135,7 @@ export type Database = {
           name?: string
           note?: string | null
           phone?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -94,7 +144,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_donor_listings: { Args: never; Returns: number }
+      get_contact_request_status: {
+        Args: { _id: string }
+        Returns: {
+          created_at: string
+          donor_blood_group: string
+          donor_email: string
+          donor_location: string
+          donor_name: string
+          donor_note: string
+          donor_phone: string
+          id: string
+          status: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
