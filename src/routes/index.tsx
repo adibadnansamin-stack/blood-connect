@@ -73,14 +73,14 @@ function HomePage() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-              <Droplet className="h-4 w-4 fill-primary" />
-              Save a life today
+              <MapPin className="h-4 w-4" />
+              Serving Maijdee &amp; surrounding areas
             </div>
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Find a blood donor. <span className="text-primary">Or become one.</span>
+              Find a blood donor in <span className="text-primary">Maijdee &amp; Noakhali.</span>
             </h1>
             <p className="mt-4 max-w-xl text-lg text-muted-foreground lg:mx-0 mx-auto">
-              A simple, public platform connecting blood donors with patients in need. No sign-up
+              A local platform connecting blood donors with people who need blood. No sign-up
               required.
             </p>
 

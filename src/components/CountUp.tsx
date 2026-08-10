@@ -9,27 +9,54 @@ interface CountUpProps {
 export function CountUp({ value, duration = 1200, className }: CountUpProps) {
   const [display, setDisplay] = useState(value > 0 ? 1 : 0);
   const frame = useRef<number>(0);
+  const started = useRef(false);
+  const ref = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const node = ref.current;
+    if (!node) return;
+
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || value <= 1) {
-      setDisplay(value);
-      return;
-    }
-    const start = performance.now();
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.max(1, Math.round(eased * value)));
-      if (progress < 1) frame.current = requestAnimationFrame(tick);
+
+    const run = () => {
+      if (started.current) return;
+      started.current = true;
+      if (reduced || value <= 1) {
+        setDisplay(value);
+        return;
+      }
+      const start = performance.now();
+      const tick = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setDisplay(Math.max(1, Math.round(eased * value)));
+        if (progress < 1) frame.current = requestAnimationFrame(tick);
+      };
+      frame.current = requestAnimationFrame(tick);
     };
-    frame.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame.current);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            run();
+            observer.disconnect();
+          }
+        }
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame.current);
+    };
   }, [value, duration]);
 
   return (
-    <span className={className} aria-label={String(value)}>
+    <span ref={ref} className={className} aria-label={String(value)}>
       {display.toLocaleString()}
     </span>
   );
