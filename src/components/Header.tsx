@@ -1,13 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Droplet, Menu, X } from "lucide-react";
+import { Droplet, Menu, X, Home, Search, Siren, HeartHandshake, PlusCircle, LogIn } from "lucide-react";
 import { useState } from "react";
 
 const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/donors", label: "Find Donors" },
-  { to: "/requests", label: "Blood Requests" },
-  { to: "/donate", label: "Become a Donor" },
-  { to: "/request-blood", label: "Request Blood" },
+  { to: "/", label: "Home", icon: Home },
+  { to: "/donors", label: "Find Donors", icon: Search },
+  { to: "/requests", label: "Blood Requests", icon: Siren },
+  { to: "/donate", label: "Become a Donor", icon: HeartHandshake },
+  { to: "/request-blood", label: "Request Blood", icon: PlusCircle },
 ];
 
 export function Header() {
@@ -29,16 +29,24 @@ export function Header() {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`nav-link rounded-md px-3 py-2 text-sm font-medium ${
+                className={`nav-link inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium ${
                   isActive
                     ? "bg-secondary text-foreground"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 }`}
               >
+                <link.icon className="h-4 w-4" />
                 {link.label}
               </Link>
             );
           })}
+          <Link
+            to="/auth"
+            className="btn btn-primary ml-2 px-3 py-2 text-sm"
+          >
+            <LogIn className="h-4 w-4" />
+            Donor login
+          </Link>
         </nav>
 
         <button
@@ -61,14 +69,23 @@ export function Header() {
                   key={link.to}
                   to={link.to}
                   onClick={() => setMobileOpen(false)}
-                  className={`rounded-md px-3 py-2 text-sm font-medium ${
+                  className={`inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
                     isActive ? "bg-secondary text-foreground" : "text-muted-foreground hover:bg-secondary"
                   }`}
                 >
+                  <link.icon className="h-4 w-4" />
                   {link.label}
                 </Link>
               );
             })}
+            <Link
+              to="/auth"
+              onClick={() => setMobileOpen(false)}
+              className="btn btn-primary mt-2 px-3 py-2 text-sm"
+            >
+              <LogIn className="h-4 w-4" />
+              Donor login
+            </Link>
           </nav>
         </div>
       )}
