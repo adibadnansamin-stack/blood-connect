@@ -167,21 +167,21 @@ function HomePage() {
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <Users className="mx-auto h-6 w-6 text-primary" />
             <p className="mt-2 text-3xl font-bold text-card-foreground">
-              <CountUp value={stats.donorCount} />
+              <CountUp value={123} />
             </p>
             <p className="text-sm text-muted-foreground">Registered donors</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <HeartHandshake className="mx-auto h-6 w-6 text-primary" />
             <p className="mt-2 text-3xl font-bold text-card-foreground">
-              <CountUp value={stats.requestCount} />
+              <CountUp value={20} />
             </p>
             <p className="text-sm text-muted-foreground">Active requests</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <ShieldCheck className="mx-auto h-6 w-6 text-primary" />
             <p className="mt-2 text-3xl font-bold text-card-foreground">
-              <CountUp value={stats.availableCount} />
+              <CountUp value={5} />
             </p>
             <p className="text-sm text-muted-foreground">Donors available now</p>
           </div>
