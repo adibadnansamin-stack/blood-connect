@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
-import { ArrowRight, Droplet, Search, HeartHandshake, Users, Siren, ShieldCheck } from "lucide-react";
+import { ArrowRight, Droplet, Search, HeartHandshake, Users, Siren, ShieldCheck, MapPin } from "lucide-react";
 import { listDonors } from "@/lib/donors.functions";
 import { listRequests } from "@/lib/requests.functions";
 import { DonorCard } from "@/components/DonorCard";
