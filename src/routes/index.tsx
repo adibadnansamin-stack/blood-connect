@@ -37,10 +37,10 @@ const recentRequestsQueryOptions = queryOptions({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "BloodConnect — Find Blood Donors & Request Blood" },
-      { name: "description", content: "Connect with blood donors or post a blood request. A simple, public platform helping patients and donors find each other quickly." },
-      { property: "og:title", content: "BloodConnect — Find Blood Donors & Request Blood" },
-      { property: "og:description", content: "Connect with blood donors or post a blood request. A simple, public platform helping patients and donors find each other quickly." },
+      { title: "BloodConnect — Blood Donors in Maijdee & Noakhali" },
+      { name: "description", content: "Find blood donors or post a blood request in Maijdee, Noakhali. A local platform helping patients and donors reach each other fast." },
+      { property: "og:title", content: "BloodConnect — Blood Donors in Maijdee & Noakhali" },
+      { property: "og:description", content: "Find blood donors or post a blood request in Maijdee, Noakhali. A local platform helping patients and donors reach each other fast." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
