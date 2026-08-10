@@ -36,12 +36,28 @@ function createPublicSupabase() {
   });
 }
 
+const PUBLIC_DONOR_COLUMNS = "id, name, blood_group, location, is_available, note, created_at";
+
+export interface PublicDonor {
+  id: string;
+  name: string;
+  blood_group: string;
+  location: string;
+  is_available: boolean | null;
+  note: string | null;
+  created_at: string | null;
+}
+
 export const listDonors = createServerFn({ method: "GET" })
   .validator((data) => donorListSchema.parse(data))
   .handler(async ({ data }) => {
 
     const supabase = createPublicSupabase();
-    let query = supabase.from("donors").select("*").order("created_at", { ascending: false });
+    let query = supabase
+      .from("donors")
+      .select(PUBLIC_DONOR_COLUMNS)
+      .order("created_at", { ascending: false });
+
 
     if (data.bloodGroup && data.bloodGroup !== "all") {
       query = query.eq("blood_group", data.bloodGroup);
