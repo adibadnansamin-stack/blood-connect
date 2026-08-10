@@ -4,7 +4,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { ArrowRight, Droplet, Search, HeartHandshake, Users, Siren, ShieldCheck, MapPin } from "lucide-react";
 import { listDonors } from "@/lib/donors.functions";
 import { listRequests } from "@/lib/requests.functions";
-import { DonorCard } from "@/components/DonorCard";
+import { DonorSlideshow } from "@/components/DonorSlideshow";
 import { RequestCard } from "@/components/RequestCard";
 import { CountUp } from "@/components/CountUp";
 import { BLOOD_GROUPS } from "@/lib/blood-data";
