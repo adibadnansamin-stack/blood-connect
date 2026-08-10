@@ -219,8 +219,12 @@ function HomePage() {
                 title: "Save a life",
                 description: "Donors respond to requests and patients get the blood they need.",
               },
-            ].map((item) => (
-              <div key={item.step} className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            ].map((item, i) => (
+              <div
+                key={item.step}
+                className="slide-in-step rounded-xl border border-border bg-card p-6 shadow-sm"
+                style={{ animationDelay: `${i * 150}ms` }}
+              >
                 <span className="text-sm font-bold text-primary">{item.step}</span>
                 <h3 className="mt-3 text-lg font-semibold text-card-foreground">{item.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
@@ -245,16 +249,10 @@ function HomePage() {
               View all <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {recentDonors.map((donor) => (
-              <DonorCard key={donor.id} donor={donor} />
-            ))}
-            {recentDonors.length === 0 && (
-              <p className="col-span-full text-center text-sm text-muted-foreground">
-                No donors registered yet. Be the first!
-              </p>
-            )}
+          <div className="mt-8">
+            <DonorSlideshow donors={recentDonors} />
           </div>
+
           <div className="mt-6 text-center sm:hidden">
             <Link to="/donors" className="group inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent">
               View all donors <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
