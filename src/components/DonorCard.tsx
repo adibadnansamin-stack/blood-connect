@@ -1,19 +1,20 @@
 import { MapPin, Droplet, CheckCircle2, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import type { Tables } from "@/integrations/supabase/types";
-import { ContactDialog } from "@/components/ContactDialog";
+import type { PublicDonor } from "@/lib/donors.functions";
+import { ContactRequestDialog } from "@/components/ContactRequestDialog";
 
 interface DonorCardProps {
-  donor: Tables<"donors">;
+  donor: PublicDonor;
+  showRequestButton?: boolean;
 }
 
-export function DonorCard({ donor }: DonorCardProps) {
+export function DonorCard({ donor, showRequestButton = true }: DonorCardProps) {
   const updated = donor.created_at
     ? formatDistanceToNow(new Date(donor.created_at), { addSuffix: true })
     : "Unknown";
 
   return (
-    <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm card-hover">
+    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-5 shadow-sm card-hover">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold text-card-foreground">{donor.name}</h3>
@@ -45,21 +46,11 @@ export function DonorCard({ donor }: DonorCardProps) {
 
       {donor.note && <p className="mt-4 text-sm text-muted-foreground">{donor.note}</p>}
 
-      <div className="mt-5 pt-1">
-        <ContactDialog
-          kind="donor"
-          name={donor.name}
-          bloodGroup={donor.blood_group}
-          location={donor.location}
-          phone={donor.phone}
-          email={donor.email}
-          trigger={
-            <button type="button" className="btn btn-outline w-full px-4 py-2.5 text-sm">
-              Contact donor
-            </button>
-          }
-        />
-      </div>
+      {showRequestButton && (
+        <div className="mt-auto pt-5">
+          <ContactRequestDialog donor={donor} />
+        </div>
+      )}
     </div>
   );
 }
