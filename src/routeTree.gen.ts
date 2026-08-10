@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as DonorsRouteImport } from './routes/donors'
 import { Route as RequestBloodRouteImport } from './routes/request-blood'
@@ -18,6 +19,11 @@ import { Route as RequestsRouteImport } from './routes/requests'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DonateRoute = DonateRouteImport.update({
@@ -43,6 +49,7 @@ const RequestsRoute = RequestsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/donate': typeof DonateRoute
   '/donors': typeof DonorsRoute
   '/request-blood': typeof RequestBloodRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/donate': typeof DonateRoute
   '/donors': typeof DonorsRoute
   '/request-blood': typeof RequestBloodRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/donate': typeof DonateRoute
   '/donors': typeof DonorsRoute
   '/request-blood': typeof RequestBloodRoute
@@ -65,14 +74,23 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/donate' | '/donors' | '/request-blood' | '/requests'
+  fullPaths:
+    '/' | '/auth' | '/donate' | '/donors' | '/request-blood' | '/requests'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/donate' | '/donors' | '/request-blood' | '/requests'
-  id: '__root__' | '/' | '/donate' | '/donors' | '/request-blood' | '/requests'
+  to: '/' | '/auth' | '/donate' | '/donors' | '/request-blood' | '/requests'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/donate'
+    | '/donors'
+    | '/request-blood'
+    | '/requests'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   DonateRoute: typeof DonateRoute
   DonorsRoute: typeof DonorsRoute
   RequestBloodRoute: typeof RequestBloodRoute
@@ -86,6 +104,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/donate': {
@@ -121,6 +146,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   DonateRoute: DonateRoute,
   DonorsRoute: DonorsRoute,
   RequestBloodRoute: RequestBloodRoute,
@@ -129,13 +155,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
