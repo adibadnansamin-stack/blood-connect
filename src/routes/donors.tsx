@@ -5,6 +5,7 @@ import { useState } from "react";
 import { listDonors } from "@/lib/donors.functions";
 import { DonorCard } from "@/components/DonorCard";
 import { FilterBar } from "@/components/FilterBar";
+import { useLanguage } from "@/lib/i18n";
 
 const donorsQueryOptions = queryOptions({
   queryKey: ["donors"],
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/donors")({
 
 function DonorsPage() {
   const { data: donors } = useSuspenseQuery(donorsQueryOptions);
+  const { t } = useLanguage();
   const [bloodGroup, setBloodGroup] = useState("all");
   const [location, setLocation] = useState("");
   const [availableOnly, setAvailableOnly] = useState(false);
@@ -46,10 +48,8 @@ function DonorsPage() {
     <div className="px-4 py-10 md:py-16">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Find blood donors</h1>
-          <p className="mt-2 text-muted-foreground">
-            Search by blood group and location to find someone who can help.
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{t("donors.title")}</h1>
+          <p className="mt-2 text-muted-foreground">{t("donors.subtitle")}</p>
         </div>
 
         <FilterBar
@@ -70,10 +70,8 @@ function DonorsPage() {
 
         {filtered.length === 0 && (
           <div className="mt-12 rounded-xl border border-border bg-card p-10 text-center">
-            <p className="text-lg font-medium text-card-foreground">No donors match your filters.</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Try widening your search or register as a donor to help others.
-            </p>
+            <p className="text-lg font-medium text-card-foreground">{t("donors.emptyTitle")}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t("donors.emptyBody")}</p>
           </div>
         )}
       </div>

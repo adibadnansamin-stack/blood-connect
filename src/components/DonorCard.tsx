@@ -2,6 +2,7 @@ import { MapPin, Droplet, CheckCircle2, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { PublicDonor } from "@/lib/donors.functions";
 import { ContactRequestDialog } from "@/components/ContactRequestDialog";
+import { useLanguage } from "@/lib/i18n";
 
 interface DonorCardProps {
   donor: PublicDonor;
@@ -9,6 +10,7 @@ interface DonorCardProps {
 }
 
 export function DonorCard({ donor, showRequestButton = true }: DonorCardProps) {
+  const { t } = useLanguage();
   const updated = donor.created_at
     ? formatDistanceToNow(new Date(donor.created_at), { addSuffix: true })
     : "Unknown";
@@ -33,14 +35,14 @@ export function DonorCard({ donor, showRequestButton = true }: DonorCardProps) {
         {donor.is_available ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-success/15 px-2 py-1 text-success">
             <CheckCircle2 className="h-3.5 w-3.5" />
-            Available
+            {t("card.available")}
           </span>
         ) : (
-          <span className="rounded-full bg-muted px-2 py-1 text-muted-foreground">Unavailable</span>
+          <span className="rounded-full bg-muted px-2 py-1 text-muted-foreground">{t("card.unavailable")}</span>
         )}
         <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-muted-foreground">
           <Clock className="h-3.5 w-3.5" />
-          Updated {updated}
+          {t("card.updated")} {updated}
         </span>
       </div>
 

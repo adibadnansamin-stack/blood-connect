@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RequestForm } from "@/components/RequestForm";
+import { useLanguage } from "@/lib/i18n";
 
 export const Route = createFileRoute("/request-blood")({
   head: () => ({
@@ -16,14 +17,13 @@ export const Route = createFileRoute("/request-blood")({
 });
 
 function RequestBloodPage() {
+  const { t } = useLanguage();
   return (
     <div className="px-4 py-10 md:py-16">
       <div className="mx-auto max-w-2xl">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Request blood</h1>
-          <p className="mt-2 text-muted-foreground">
-            Post your need so nearby donors can see it and reach out to help.
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{t("requestBlood.title")}</h1>
+          <p className="mt-2 text-muted-foreground">{t("requestBlood.subtitle")}</p>
         </div>
         <RequestForm />
       </div>

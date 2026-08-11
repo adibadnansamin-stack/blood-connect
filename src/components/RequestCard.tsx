@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import type { Tables } from "@/integrations/supabase/types";
 import { URGENCY_OPTIONS } from "@/lib/blood-data";
 import { ContactDialog } from "@/components/ContactDialog";
+import { useLanguage } from "@/lib/i18n";
 
 interface RequestCardProps {
   request: Tables<"blood_requests">;
@@ -19,6 +20,7 @@ const urgencyClasses: Record<string, string> = {
 };
 
 export function RequestCard({ request }: RequestCardProps) {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-sm card-hover">
       <div className="flex items-start justify-between gap-3">
@@ -42,12 +44,12 @@ export function RequestCard({ request }: RequestCardProps) {
           }`}
         >
           <Clock className="h-3.5 w-3.5" />
-          {urgencyLabel(request.urgency)}
+          {t(`urgency.${request.urgency}`) || urgencyLabel(request.urgency)}
         </span>
         <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-muted-foreground">
           {request.created_at
-            ? `Posted ${formatDistanceToNow(new Date(request.created_at), { addSuffix: true })}`
-            : "Recently posted"}
+            ? `${t("card.posted")} ${formatDistanceToNow(new Date(request.created_at), { addSuffix: true })}`
+            : t("card.recentlyPosted")}
         </span>
       </div>
 
@@ -63,7 +65,7 @@ export function RequestCard({ request }: RequestCardProps) {
           email={request.email}
           trigger={
             <button type="button" className="btn btn-outline w-full px-4 py-2.5 text-sm">
-              View request
+              {t("card.viewRequest")}
             </button>
           }
         />

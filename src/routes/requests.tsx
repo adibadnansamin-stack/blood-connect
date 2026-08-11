@@ -6,6 +6,7 @@ import { listRequests } from "@/lib/requests.functions";
 import { RequestCard } from "@/components/RequestCard";
 import { FilterBar } from "@/components/FilterBar";
 import { URGENCY_OPTIONS } from "@/lib/blood-data";
+import { useLanguage } from "@/lib/i18n";
 
 const requestsQueryOptions = queryOptions({
   queryKey: ["blood-requests"],
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/requests")({
 
 function RequestsPage() {
   const { data: requests } = useSuspenseQuery(requestsQueryOptions);
+  const { t } = useLanguage();
   const [bloodGroup, setBloodGroup] = useState("all");
   const [location, setLocation] = useState("");
   const [urgency, setUrgency] = useState("all");
@@ -47,10 +49,8 @@ function RequestsPage() {
     <div className="px-4 py-10 md:py-16">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Blood requests</h1>
-          <p className="mt-2 text-muted-foreground">
-            Active requests from patients and families. Reach out directly if you can help.
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{t("requests.title")}</h1>
+          <p className="mt-2 text-muted-foreground">{t("requests.subtitle")}</p>
         </div>
 
         <FilterBar
