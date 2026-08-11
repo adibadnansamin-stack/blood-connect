@@ -8,6 +8,8 @@ import { DonorSlideshow } from "@/components/DonorSlideshow";
 import { RequestCard } from "@/components/RequestCard";
 import { CountUp } from "@/components/CountUp";
 import { BLOOD_GROUPS } from "@/lib/blood-data";
+import { useLanguage } from "@/lib/i18n";
+import { useInView } from "@/hooks/use-in-view";
 
 const homeStatsQueryOptions = queryOptions({
   queryKey: ["home-stats"],
@@ -57,10 +59,46 @@ export const Route = createFileRoute("/")({
 
 const URGENT_LEVELS = ["urgent", "within_24h"];
 
+function HowItWorks() {
+  const { t } = useLanguage();
+  const { ref, inView } = useInView<HTMLDivElement>(0.25);
+
+  const steps = [
+    { step: "01", titleKey: "home.how.1.title", bodyKey: "home.how.1.body" },
+    { step: "02", titleKey: "home.how.2.title", bodyKey: "home.how.2.body" },
+    { step: "03", titleKey: "home.how.3.title", bodyKey: "home.how.3.body" },
+  ];
+
+  return (
+    <section className="px-4 py-16">
+      <div className="mx-auto max-w-4xl">
+        <h2 className="text-center text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+          {t("home.how.title")}
+        </h2>
+        <div ref={ref} className="mt-10 grid gap-6 overflow-hidden md:grid-cols-3">
+          {steps.map((item, i) => (
+            <div
+              key={item.step}
+              className={`reveal-slide rounded-xl border border-border bg-card p-6 shadow-sm ${
+                inView ? "is-visible" : ""
+              }`}
+              style={{ transitionDelay: `${i * 180}ms` }}
+            >
+              <span className="text-sm font-bold text-primary">{item.step}</span>
+              <h3 className="mt-3 text-lg font-semibold text-card-foreground">{t(item.titleKey)}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t(item.bodyKey)}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomePage() {
-  const { data: stats } = useSuspenseQuery(homeStatsQueryOptions);
   const { data: donors } = useSuspenseQuery(recentDonorsQueryOptions);
   const { data: requests } = useSuspenseQuery(recentRequestsQueryOptions);
+  const { t } = useLanguage();
 
   const recentDonors = donors.slice(0, 3);
   const urgentRequests = requests.filter((r) => URGENT_LEVELS.includes(r.urgency)).slice(0, 3);
@@ -74,28 +112,27 @@ function HomePage() {
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
               <MapPin className="h-4 w-4" />
-              Serving Maijdee &amp; surrounding areas
+              {t("home.badge")}
             </div>
             <h1 className="mt-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Find a blood donor in <span className="text-primary">Maijdee &amp; Noakhali.</span>
+              {t("home.title.a")} <span className="text-primary">{t("home.title.b")}</span>
             </h1>
             <p className="mt-4 max-w-xl text-lg text-muted-foreground lg:mx-0 mx-auto">
-              A local platform connecting blood donors with people who need blood. No sign-up
-              required.
+              {t("home.subtitle")}
             </p>
 
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row lg:justify-start justify-center">
               <Link to="/donors" className="btn btn-primary px-6 py-3 text-base">
                 <Search className="h-5 w-5" />
-                Find donors
+                {t("home.cta.find")}
               </Link>
               <Link to="/request-blood" className="btn btn-outline px-6 py-3 text-base">
-                Request blood
+                {t("home.cta.request")}
               </Link>
             </div>
           </div>
 
-          {/* Subtle illustration */}
+          {/* Subtle illustration with slowly orbiting blood groups */}
           <div className="relative mx-auto hidden aspect-square w-full max-w-sm lg:block" aria-hidden="true">
             <div className="absolute inset-0 rounded-full border border-primary/15" />
             <div className="absolute inset-8 rounded-full border border-primary/20" />
@@ -103,22 +140,26 @@ function HomePage() {
             <div className="absolute inset-0 flex items-center justify-center">
               <Droplet className="h-24 w-24 fill-primary/90 text-primary/90" strokeWidth={1} />
             </div>
-            {BLOOD_GROUPS.map((group, i) => {
-              const angle = (i / BLOOD_GROUPS.length) * 2 * Math.PI - Math.PI / 2;
-              const radius = 46;
-              return (
-                <span
-                  key={group}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-border bg-card px-2.5 py-1 text-xs font-semibold text-muted-foreground shadow-sm"
-                  style={{
-                    left: `${50 + radius * Math.cos(angle)}%`,
-                    top: `${50 + radius * Math.sin(angle)}%`,
-                  }}
-                >
-                  {group}
-                </span>
-              );
-            })}
+            <div className="orbit-ring absolute inset-0">
+              {BLOOD_GROUPS.map((group, i) => {
+                const angle = (i / BLOOD_GROUPS.length) * 2 * Math.PI - Math.PI / 2;
+                const radius = 46;
+                return (
+                  <span
+                    key={group}
+                    className="absolute -translate-x-1/2 -translate-y-1/2"
+                    style={{
+                      left: `${50 + radius * Math.cos(angle)}%`,
+                      top: `${50 + radius * Math.sin(angle)}%`,
+                    }}
+                  >
+                    <span className="orbit-chip block rounded-full border border-border bg-card px-2.5 py-1 text-xs font-semibold text-muted-foreground shadow-sm">
+                      {group}
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -130,17 +171,15 @@ function HomePage() {
             <div>
               <h2 className="inline-flex items-center gap-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
                 <Siren className="h-6 w-6 text-destructive" />
-                Urgent blood requests
+                {t("home.urgent.title")}
               </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                People who need blood right now or within 24 hours.
-              </p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("home.urgent.subtitle")}</p>
             </div>
             <Link
               to="/requests"
               className="group inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent"
             >
-              View all blood requests
+              {t("home.urgent.viewAll")}
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
@@ -151,10 +190,8 @@ function HomePage() {
             ))}
             {urgentRequests.length === 0 && (
               <div className="col-span-full rounded-xl border border-border bg-card p-8 text-center">
-                <p className="font-medium text-card-foreground">No urgent requests right now.</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  If you need blood urgently, post a request and donors will see it here.
-                </p>
+                <p className="font-medium text-card-foreground">{t("home.urgent.emptyTitle")}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{t("home.urgent.emptyBody")}</p>
               </div>
             )}
           </div>
@@ -169,84 +206,51 @@ function HomePage() {
             <p className="mt-2 text-3xl font-bold text-card-foreground">
               <CountUp value={123} />
             </p>
-            <p className="text-sm text-muted-foreground">Registered donors</p>
+            <p className="text-sm text-muted-foreground">{t("home.stats.donors")}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <HeartHandshake className="mx-auto h-6 w-6 text-primary" />
             <p className="mt-2 text-3xl font-bold text-card-foreground">
               <CountUp value={20} />
             </p>
-            <p className="text-sm text-muted-foreground">Active requests</p>
+            <p className="text-sm text-muted-foreground">{t("home.stats.requests")}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <ShieldCheck className="mx-auto h-6 w-6 text-primary" />
             <p className="mt-2 text-3xl font-bold text-card-foreground">
               <CountUp value={5} />
             </p>
-            <p className="text-sm text-muted-foreground">Donors available now</p>
+            <p className="text-sm text-muted-foreground">{t("home.stats.available")}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <Droplet className="mx-auto h-6 w-6 fill-primary text-primary" />
             <p className="mt-2 text-3xl font-bold text-card-foreground">
               <CountUp value={BLOOD_GROUPS.length} />
             </p>
-            <p className="text-sm text-muted-foreground">Blood groups</p>
+            <p className="text-sm text-muted-foreground">{t("home.stats.groups")}</p>
           </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="px-4 py-16">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="text-center text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How it works
-          </h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                step: "01",
-                title: "Search or post",
-                description: "Find donors by blood group and location, or post a blood request.",
-              },
-              {
-                step: "02",
-                title: "Connect safely",
-                description:
-                  "Contact details are shared only as needed to help coordinate the donation.",
-              },
-              {
-                step: "03",
-                title: "Save a life",
-                description: "Donors respond to requests and patients get the blood they need.",
-              },
-            ].map((item, i) => (
-              <div
-                key={item.step}
-                className="slide-in-step rounded-xl border border-border bg-card p-6 shadow-sm"
-                style={{ animationDelay: `${i * 150}ms` }}
-              >
-                <span className="text-sm font-bold text-primary">{item.step}</span>
-                <h3 className="mt-3 text-lg font-semibold text-card-foreground">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HowItWorks />
 
       {/* Recent donors */}
       <section className="bg-secondary/30 px-4 py-16">
         <div className="mx-auto max-w-6xl">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">Recent donors</h2>
-              <p className="mt-1 text-sm text-muted-foreground">People ready to donate blood near you.</p>
+              <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+                {t("home.recentDonors.title")}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">{t("home.recentDonors.subtitle")}</p>
             </div>
             <Link
               to="/donors"
               className="group hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent sm:inline-flex"
             >
-              View all <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              {t("common.viewAll")}{" "}
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
           <div className="mt-8">
@@ -255,7 +259,8 @@ function HomePage() {
 
           <div className="mt-6 text-center sm:hidden">
             <Link to="/donors" className="group inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent">
-              View all donors <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              {t("home.viewAllDonors")}{" "}
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
@@ -266,14 +271,17 @@ function HomePage() {
         <div className="mx-auto max-w-6xl">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">Recent requests</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Patients currently looking for blood.</p>
+              <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+                {t("home.recentRequests.title")}
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">{t("home.recentRequests.subtitle")}</p>
             </div>
             <Link
               to="/requests"
               className="group hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent sm:inline-flex"
             >
-              View all <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              {t("common.viewAll")}{" "}
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -282,13 +290,14 @@ function HomePage() {
             ))}
             {recentRequestsList.length === 0 && (
               <p className="col-span-full text-center text-sm text-muted-foreground">
-                No active blood requests right now.
+                {t("home.noRequests")}
               </p>
             )}
           </div>
           <div className="mt-6 text-center sm:hidden">
             <Link to="/requests" className="group inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent">
-              View all requests <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              {t("home.viewAllRequests")}{" "}
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
@@ -299,10 +308,8 @@ function HomePage() {
         <div className="mx-auto flex max-w-4xl gap-3 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground shadow-sm">
           <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
           <p>
-            <span className="font-semibold text-card-foreground">Important:</span> BloodConnect
-            helps connect blood donors and people requesting blood. Blood availability, donor
-            eligibility, and medical suitability should be confirmed independently with the relevant
-            hospital or medical professional.
+            <span className="font-semibold text-card-foreground">{t("disclaimer.label")}</span>{" "}
+            {t("disclaimer.body")}
           </p>
         </div>
       </section>
@@ -310,22 +317,20 @@ function HomePage() {
       {/* CTA */}
       <section className="bg-primary px-4 py-16 text-primary-foreground">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Ready to make a difference?</h2>
-          <p className="mt-3 text-primary-foreground/90">
-            Whether you want to donate or need blood, it only takes a minute to get started.
-          </p>
+          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">{t("home.cta.title")}</h2>
+          <p className="mt-3 text-primary-foreground/90">{t("home.cta.body")}</p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               to="/donate"
               className="btn bg-primary-foreground px-6 py-3 text-base text-primary shadow-sm hover:bg-primary-foreground/90"
             >
-              Become a donor
+              {t("home.cta.become")}
             </Link>
             <Link
               to="/request-blood"
               className="btn border border-primary-foreground/40 bg-transparent px-6 py-3 text-base text-primary-foreground hover:bg-primary-foreground/10"
             >
-              Post a request
+              {t("home.cta.post")}
             </Link>
           </div>
         </div>
