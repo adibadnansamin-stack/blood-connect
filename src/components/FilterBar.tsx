@@ -78,7 +78,7 @@ export function FilterBar({
               onChange={(e) => onExtraChange(e.target.value)}
               className="w-full rounded-md border border-input bg-background py-2 px-3 text-sm text-foreground outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <option value="all">All</option>
+              <option value="all">{t("filter.all")}</option>
               {extraOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
@@ -96,7 +96,7 @@ export function FilterBar({
               onChange={(e) => onAvailableOnlyChange(e.target.checked)}
               className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
             />
-            Available only
+            {t("filter.availableOnly")}
           </label>
         )}
 
@@ -106,7 +106,7 @@ export function FilterBar({
           className="btn btn-primary px-5 py-2 text-sm"
         >
           <SlidersHorizontal className="h-4 w-4" />
-          Search
+          {t("filter.search")}
         </button>
       </div>
     </div>
