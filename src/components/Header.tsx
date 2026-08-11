@@ -1,25 +1,30 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Droplet, Menu, X, Home, Search, Siren, HeartHandshake, PlusCircle, LogIn } from "lucide-react";
 import { useState } from "react";
+import { useLanguage } from "@/lib/i18n";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 const navLinks = [
-  { to: "/", label: "Home", icon: Home },
-  { to: "/donors", label: "Find Donors", icon: Search },
-  { to: "/requests", label: "Blood Requests", icon: Siren },
-  { to: "/donate", label: "Become a Donor", icon: HeartHandshake },
-  { to: "/request-blood", label: "Request Blood", icon: PlusCircle },
+  { to: "/", labelKey: "nav.home", icon: Home },
+  { to: "/donors", labelKey: "nav.donors", icon: Search },
+  { to: "/requests", labelKey: "nav.requests", icon: Siren },
+  { to: "/donate", labelKey: "nav.donate", icon: HeartHandshake },
+  { to: "/request-blood", labelKey: "nav.requestBlood", icon: PlusCircle },
 ];
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link to="/" className="group flex items-center gap-2 text-primary">
-          <Droplet className="h-6 w-6 fill-primary transition-transform duration-200 group-hover:scale-110" />
-          <span className="text-lg font-semibold tracking-tight text-foreground">BloodConnect</span>
+          <Droplet className="h-7 w-7 fill-primary transition-transform duration-200 group-hover:scale-110" />
+          <span className="text-2xl font-extrabold tracking-tight text-foreground md:text-[1.7rem]">
+            BloodConnect
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -36,27 +41,31 @@ export function Header() {
                 }`}
               >
                 <link.icon className="h-4 w-4" />
-                {link.label}
+                {t(link.labelKey)}
               </Link>
             );
           })}
+          <LanguageToggle className="ml-2" />
           <Link
             to="/auth"
             className="btn btn-primary ml-2 px-3 py-2 text-sm"
           >
             <LogIn className="h-4 w-4" />
-            Donor login
+            {t("nav.login")}
           </Link>
         </nav>
 
-        <button
-          type="button"
-          onClick={() => setMobileOpen((v) => !v)}
-          className="btn p-2 text-foreground hover:bg-secondary md:hidden"
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageToggle />
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            className="btn p-2 text-foreground hover:bg-secondary"
+            aria-label={t("nav.menu")}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {mobileOpen && (
@@ -74,7 +83,7 @@ export function Header() {
                   }`}
                 >
                   <link.icon className="h-4 w-4" />
-                  {link.label}
+                  {t(link.labelKey)}
                 </Link>
               );
             })}
@@ -84,7 +93,7 @@ export function Header() {
               className="btn btn-primary mt-2 px-3 py-2 text-sm"
             >
               <LogIn className="h-4 w-4" />
-              Donor login
+              {t("nav.login")}
             </Link>
           </nav>
         </div>
