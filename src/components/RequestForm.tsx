@@ -64,14 +64,14 @@ export function RequestForm() {
 
       <div className="space-y-1.5">
         <label htmlFor="patient_name" className="text-sm font-medium text-card-foreground">
-          Patient name
+          {t("form.patientName")}
         </label>
         <input
           id="patient_name"
           type="text"
           {...register("patient_name")}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
-          placeholder="Patient's name"
+          placeholder={t("form.patientName")}
         />
         {errors.patient_name && <p className="text-sm text-destructive">{errors.patient_name.message}</p>}
       </div>
@@ -79,14 +79,14 @@ export function RequestForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-1.5">
           <label htmlFor="blood_group" className="text-sm font-medium text-card-foreground">
-            Blood group needed
+            {t("form.bloodGroup")}
           </label>
           <select
             id="blood_group"
             {...register("blood_group")}
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <option value="">Select blood group</option>
+            <option value="">{t("form.selectBloodGroup")}</option>
             {BLOOD_GROUPS.map((group) => (
               <option key={group} value={group}>
                 {group}
@@ -98,7 +98,7 @@ export function RequestForm() {
 
         <div className="space-y-1.5">
           <label htmlFor="urgency" className="text-sm font-medium text-card-foreground">
-            Urgency
+            {t("form.urgency")}
           </label>
           <select
             id="urgency"
@@ -107,7 +107,7 @@ export function RequestForm() {
           >
             {URGENCY_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
-                {opt.label}
+                {t(`urgency.${opt.value}`) || opt.label}
               </option>
             ))}
           </select>
@@ -117,14 +117,14 @@ export function RequestForm() {
 
       <div className="space-y-1.5">
         <label htmlFor="location" className="text-sm font-medium text-card-foreground">
-          Hospital / Location
+          {t("form.location")}
         </label>
         <input
           id="location"
           type="text"
           {...register("location")}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
-          placeholder="Hospital name and area"
+          placeholder={t("form.locationPlaceholder")}
         />
         {errors.location && <p className="text-sm text-destructive">{errors.location.message}</p>}
       </div>
@@ -132,7 +132,7 @@ export function RequestForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-1.5">
           <label htmlFor="phone" className="text-sm font-medium text-card-foreground">
-            Contact phone <span className="font-normal text-muted-foreground">(required)</span>
+            {t("form.phone")} <span className="font-normal text-muted-foreground">({t("form.required")})</span>
           </label>
           <input
             id="phone"
@@ -146,7 +146,7 @@ export function RequestForm() {
 
         <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-medium text-card-foreground">
-            Contact email <span className="font-normal text-muted-foreground">(optional)</span>
+            {t("form.email")} <span className="font-normal text-muted-foreground">({t("form.optional")})</span>
           </label>
           <input
             id="email"
@@ -158,21 +158,21 @@ export function RequestForm() {
           {errors.email ? (
             <p className="text-sm text-destructive">{errors.email.message}</p>
           ) : (
-            <p className="text-xs text-muted-foreground">Phone is the fastest way to connect in an emergency — email is optional.</p>
+            <p className="text-xs text-muted-foreground">{t("form.emailHint")}</p>
           )}
         </div>
       </div>
 
       <div className="space-y-1.5">
         <label htmlFor="note" className="text-sm font-medium text-card-foreground">
-          Note <span className="font-normal text-muted-foreground">(optional)</span>
+          {t("form.note")} <span className="font-normal text-muted-foreground">({t("form.optional")})</span>
         </label>
         <textarea
           id="note"
           rows={3}
           {...register("note")}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
-          placeholder="Any extra details, e.g. number of bags needed"
+          placeholder={t("form.notePlaceholder")}
         />
         {errors.note && <p className="text-sm text-destructive">{errors.note.message}</p>}
       </div>
@@ -183,7 +183,7 @@ export function RequestForm() {
         className="btn btn-primary w-full px-5 py-2.5 text-sm sm:w-auto"
       >
         {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-        Post blood request
+        {t("form.postRequest")}
       </button>
     </form>
   );
