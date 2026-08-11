@@ -5,6 +5,7 @@ import { z } from "zod";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { createRequest } from "@/lib/requests.functions";
 import { BLOOD_GROUPS, URGENCY_OPTIONS } from "@/lib/blood-data";
+import { useLanguage } from "@/lib/i18n";
 
 const schema = z.object({
   patient_name: z.string().min(2, "Patient name is required").max(100, "Name is too long"),
@@ -21,6 +22,7 @@ type FormData = z.infer<typeof schema>;
 
 export function RequestForm() {
   const [submitted, setSubmitted] = useState(false);
+  const { t } = useLanguage();
   const {
     register,
     handleSubmit,
@@ -43,16 +45,14 @@ export function RequestForm() {
     return (
       <div className="rounded-xl border border-border bg-card p-8 text-center shadow-sm">
         <CheckCircle2 className="mx-auto h-10 w-10 text-success" />
-        <h3 className="mt-4 text-lg font-semibold text-card-foreground">Request posted!</h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Your blood request is now visible to potential donors. We hope you find help soon.
-        </p>
+        <h3 className="mt-4 text-lg font-semibold text-card-foreground">{t("form.postedTitle")}</h3>
+        <p className="mt-2 text-sm text-muted-foreground">{t("form.postedBody")}</p>
         <button
           type="button"
           onClick={() => setSubmitted(false)}
           className="mt-6 btn btn-primary px-4 py-2 text-sm"
         >
-          Post another request
+          {t("form.postAnother")}
         </button>
       </div>
     );
