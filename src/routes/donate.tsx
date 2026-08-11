@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DonorForm } from "@/components/DonorForm";
+import { useLanguage } from "@/lib/i18n";
 
 export const Route = createFileRoute("/donate")({
   head: () => ({
@@ -16,16 +17,15 @@ export const Route = createFileRoute("/donate")({
 });
 
 function DonatePage() {
+  const { t } = useLanguage();
   return (
     <div className="px-4 py-10 md:py-16">
       <div className="mx-auto max-w-2xl">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            Become a blood donor
+            {t("donate.title")}
           </h1>
-          <p className="mt-2 text-muted-foreground">
-            Share your details so patients and families can reach you when they need blood.
-          </p>
+          <p className="mt-2 text-muted-foreground">{t("donate.subtitle")}</p>
         </div>
         <DonorForm />
       </div>

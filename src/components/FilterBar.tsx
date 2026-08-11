@@ -1,5 +1,6 @@
 import { Search, SlidersHorizontal } from "lucide-react";
 import { BLOOD_GROUPS } from "@/lib/blood-data";
+import { useLanguage } from "@/lib/i18n";
 
 interface FilterBarProps {
   bloodGroup: string;
@@ -28,12 +29,13 @@ export function FilterBar({
   onAvailableOnlyChange,
   onSearch,
 }: FilterBarProps) {
+  const { t } = useLanguage();
   return (
     <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="flex flex-col gap-3 md:flex-row md:items-end">
         <div className="flex-1 space-y-1.5">
           <label htmlFor="location" className="text-sm font-medium text-card-foreground">
-            Location
+            {t("filter.location")}
           </label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -42,7 +44,7 @@ export function FilterBar({
               type="text"
               value={location}
               onChange={(e) => onLocationChange(e.target.value)}
-              placeholder="City, hospital, or area"
+              placeholder={t("filter.locationPlaceholder")}
               className="w-full rounded-md border border-input bg-background py-2 pl-9 pr-3 text-sm text-foreground outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
@@ -50,7 +52,7 @@ export function FilterBar({
 
         <div className="w-full space-y-1.5 md:w-40">
           <label htmlFor="blood-group" className="text-sm font-medium text-card-foreground">
-            Blood Group
+            {t("filter.bloodGroup")}
           </label>
           <select
             id="blood-group"
@@ -58,7 +60,7 @@ export function FilterBar({
             onChange={(e) => onBloodGroupChange(e.target.value)}
             className="w-full rounded-md border border-input bg-background py-2 px-3 text-sm text-foreground outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <option value="all">All groups</option>
+            <option value="all">{t("filter.allGroups")}</option>
             {BLOOD_GROUPS.map((group) => (
               <option key={group} value={group}>
                 {group}
@@ -78,7 +80,7 @@ export function FilterBar({
               onChange={(e) => onExtraChange(e.target.value)}
               className="w-full rounded-md border border-input bg-background py-2 px-3 text-sm text-foreground outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <option value="all">All</option>
+              <option value="all">{t("filter.all")}</option>
               {extraOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
@@ -96,7 +98,7 @@ export function FilterBar({
               onChange={(e) => onAvailableOnlyChange(e.target.checked)}
               className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
             />
-            Available only
+            {t("filter.availableOnly")}
           </label>
         )}
 
@@ -106,7 +108,7 @@ export function FilterBar({
           className="btn btn-primary px-5 py-2 text-sm"
         >
           <SlidersHorizontal className="h-4 w-4" />
-          Search
+          {t("filter.search")}
         </button>
       </div>
     </div>
