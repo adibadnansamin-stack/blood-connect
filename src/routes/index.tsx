@@ -303,17 +303,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Disclaimer */}
-      <section className="border-t border-border bg-secondary/40 px-4 py-10">
-        <div className="mx-auto flex max-w-4xl gap-3 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground shadow-sm">
-          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-          <p>
-            <span className="font-semibold text-card-foreground">{t("disclaimer.label")}</span>{" "}
-            {t("disclaimer.body")}
-          </p>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="bg-primary px-4 py-16 text-primary-foreground">
         <div className="mx-auto max-w-3xl text-center">
