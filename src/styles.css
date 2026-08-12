@@ -340,3 +340,28 @@
 @media (prefers-reduced-motion: reduce) {
   .reveal-slide { opacity: 1; transform: none; transition: none; }
 }
+
+/* Hamburger menu slide-down panel */
+.menu-panel {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    max-height 0.28s cubic-bezier(0.2, 0.8, 0.3, 1),
+    opacity 0.22s ease,
+    transform 0.28s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.menu-panel.is-open {
+  max-height: 28rem;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-panel {
+    transition: opacity 0.01ms;
+    transform: none;
+  }
+}
